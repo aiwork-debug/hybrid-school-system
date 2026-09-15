@@ -1,24 +1,13 @@
+// File: app/layout.tsx
 import type { Metadata } from "next";
-import { Fredoka, Playfair_Display, Inter } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
-
-const fredoka = Fredoka({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-heading",
-});
-
-const playfair = Playfair_Display({
-  subsets: ["latin"],
-  style: ["italic", "normal"],
-  weight: ["400", "600"],
-  variable: "--font-accent",
-});
+import Providers from "./providers";
 
 const inter = Inter({
   subsets: ["latin"],
-  weight: ["400", "500", "600"],
-  variable: "--font-body",
+  weight: ["400", "500", "600", "700", "800"],
+  variable: "--font-sans",
 });
 
 export const metadata: Metadata = {
@@ -33,10 +22,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body
-        className={`${fredoka.variable} ${playfair.variable} ${inter.variable} font-body antialiased`}
-      >
-        {children}
+      <body className={`${inter.variable} font-sans antialiased`}>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );
