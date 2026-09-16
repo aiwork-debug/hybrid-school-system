@@ -31,15 +31,15 @@ model User {
   image         String?
   password      String?
   role          Role      @default(STUDENT)
-  roleSelected  Boolean   @default(false) // false until the user (or Google signup) confirms their role
-  subject       Subject? // only set for teachers, via subject-selection step
+  roleSelected  Boolean   @default(false)
+  subject       Subject? 
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
   accounts Account[]
   sessions Session[]
 
-  coursesTaught    Course[]          @relation("TeacherCourses")
+  coursesTaught    Course[]         @relation("TeacherCourses")
   enrollments      Enrollment[]
   attendanceLogs   AttendanceLog[]
   recordedLectures RecordedLecture[]
@@ -85,7 +85,7 @@ model Course {
   id          String   @id @default(cuid())
   title       String
   description String?
-  subject     Subject // used by students to filter/browse courses
+  subject     Subject 
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
@@ -128,27 +128,25 @@ model LiveClass {
   title       String
   meetingUrl  String
   scheduledAt DateTime
-  courseId    String
-  course      Course   @relation(fields: [courseId], references: [references], onDelete: Cascade) // ya id
   createdAt   DateTime @default(now())
-}
 
   courseId String
-  course   Course @relation(fields: [courseId], references: [id])
+  course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
   teacherId String
   teacher   User   @relation(fields: [teacherId], references: [id])
 
   attendanceLogs AttendanceLog[]
 }
+
 model RecordedLecture {
-  id           String   @id @default(cuid())
-  title        String
-  description  String?
-  videoUrl     String
-  slidesUrl    String?   // Slides URL file upload ke liye
-  durationMins Int?
-  createdAt    DateTime @default(now())
+  id            String   @id @default(cuid())
+  title         String
+  description   String?
+  videoUrl      String
+  slidesUrl     String?   
+  durationMins  Int?
+  createdAt     DateTime @default(now())
 
   chapterId String
   chapter   Chapter  @relation(fields: [chapterId], references: [id], onDelete: Cascade)
@@ -158,6 +156,7 @@ model RecordedLecture {
 
   attendanceLogs AttendanceLog[]
 }
+
 model Assignment {
   id          String    @id @default(cuid())
   title       String
@@ -170,7 +169,7 @@ model Assignment {
 }
 
 model AttendanceLog {
-  id       String   @id @default(cuid())
+  id        String   @id @default(cuid())
   joinedAt DateTime @default(now())
 
   studentId String
