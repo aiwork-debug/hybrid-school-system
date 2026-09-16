@@ -6,6 +6,15 @@ import Link from "next/link";
 import Navbar from "@/app/components/Navbar";
 import { enrollCourse } from "./actions";
 
+// Strict interface for Live Class item
+interface LiveClassItem {
+  id: string;
+  title: string;
+  startTime?: Date;
+  meetingUrl?: string | null;
+  courseTitle: string;
+}
+
 export default async function StudentDashboard() {
   const session = await getServerSession(authOptions);
 
@@ -37,7 +46,20 @@ export default async function StudentDashboard() {
           recordedLectures: true,
         },
       },
+      liveClasses: true,
     },
+  });
+
+  // Map without any 'any' type cast
+  const upcomingLiveClasses: LiveClassItem[] = enrolledCourses.flatMap((course) => {
+    const classes = course.liveClasses ?? [];
+    return classes.map((lc) => ({
+      id: lc.id,
+      title: lc.title,
+      startTime: 'startTime' in lc ? (lc.startTime as Date) : undefined,
+      meetingUrl: 'meetingUrl' in lc ? (lc.meetingUrl as string | null) : null,
+      courseTitle: course.title,
+    }));
   });
 
   // 2. Fetch all other available courses jo student ne enroll nahi kiye
@@ -84,6 +106,50 @@ export default async function StudentDashboard() {
 
       <div className="w-full px-6 sm:px-12 max-w-[105rem] mx-auto space-y-12">
         
+        {/* Live Classes Section */}
+        {upcomingLiveClasses.length > 0 && (
+          <div className="space-y-6">
+            <div className="flex items-center justify-between">
+              <h2 className="text-2xl font-black text-[#0D1B2E]">Scheduled Live Classes</h2>
+              <span className="text-xs font-bold uppercase tracking-widest text-[#0EA894] bg-[#0EA894]/10 px-3 py-1 rounded-full">
+                {upcomingLiveClasses.length} Upcoming
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {upcomingLiveClasses.map((liveClass) => (
+                <div key={liveClass.id} className="rounded-[2.5rem] border-2 border-[#0EA894]/30 bg-white p-6 sm:p-8 shadow-sm flex flex-col justify-between space-y-6 relative overflow-hidden">
+                  <div className="absolute top-0 right-0 bg-[#0EA894] text-white text-[10px] font-black uppercase tracking-widest px-4 py-1 rounded-bl-2xl">
+                    Live
+                  </div>
+                  <div>
+                    <span className="rounded-full bg-[#0EA894]/10 px-3 py-1 text-[11px] font-black uppercase tracking-wider text-[#0EA894] mb-3 inline-block">
+                      {liveClass.courseTitle}
+                    </span>
+                    <h3 className="text-lg font-black text-[#0D1B2E] mb-2">{liveClass.title}</h3>
+                    <p className="text-xs text-slate-500 font-medium">
+                      🕒 {liveClass.startTime ? new Date(liveClass.startTime).toLocaleString() : "Time not specified"}
+                    </p>
+                  </div>
+
+                  {liveClass.meetingUrl && (
+                    <div className="pt-4 border-t border-slate-100">
+                      <a
+                        href={liveClass.meetingUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block text-center rounded-xl bg-[#0EA894] text-white px-4 py-2.5 text-xs font-black uppercase tracking-wider shadow-md shadow-[#0EA894]/20 hover:bg-[#0c9582] transition-colors"
+                      >
+                        Join Live Class →
+                      </a>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Enrolled Courses Section */}
         <div className="space-y-6">
           <div className="flex items-center justify-between">
@@ -121,7 +187,7 @@ export default async function StudentDashboard() {
 
                   <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
                     <span className="text-xs font-bold text-slate-500">
-                      {course.chapters.length} Chapters
+                      {course.chapters?.length || 0} Chapters
                     </span>
                     <Link
                       href={`/dashboard/student/courses/${course.id}`}
@@ -171,7 +237,7 @@ export default async function StudentDashboard() {
 
                   <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
                     <span className="text-xs font-bold text-slate-500">
-                      {course._count.chapters} Chapters
+                      {course._count?.chapters || 0} Chapters
                     </span>
                     <form action={enrollCourse.bind(null, course.id)}>
                       <button
