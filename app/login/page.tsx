@@ -9,7 +9,7 @@ import AuthSidePanel from "../components/Auth/AuthSidePanel";
 
 export default function LoginPage() {
   const router = useRouter();
-  const [role, setRole] = useState<"STUDENT" | "TEACHER">("STUDENT");
+  const [role, setRole] = useState<"STUDENT" | "TEACHER" | "ADMIN">("STUDENT");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -33,17 +33,26 @@ export default function LoginPage() {
       return;
     }
 
-    // fetch the freshly-created session to confirm the real role
     const session = await getSession();
     const actualRole = session?.user?.role;
     const roleSelected = session?.user?.roleSelected;
+
+    // Admin flow — koi roleSelected/choose-role check nahi lagega
+    if (role === "ADMIN" || actualRole === "ADMIN") {
+      if (actualRole !== "ADMIN") {
+        setError("This account is not an admin account.");
+        setLoading(false);
+        return;
+      }
+      router.push("/dashboard/admin");
+      return;
+    }
 
     if (!roleSelected) {
       router.push("/choose-role");
       return;
     }
 
-    // block login if the picked toggle doesn't match the account's real role
     if (actualRole !== role) {
       setError(
         `This account is registered as a ${actualRole?.toLowerCase()}. Please select "${actualRole === "TEACHER" ? "Teacher" : "Student"}" to log in.`
@@ -82,28 +91,39 @@ export default function LoginPage() {
           </p>
 
           {/* Role toggle */}
-          <div className="mb-6 grid grid-cols-2 gap-3">
+          <div className="mb-6 grid grid-cols-3 gap-2.5">
             <button
               type="button"
               onClick={() => setRole("STUDENT")}
-              className={`rounded-2xl border-2 px-4 py-3 text-sm font-bold transition-colors ${
+              className={`rounded-2xl border-2 px-3 py-3 text-xs sm:text-sm font-bold transition-colors ${
                 role === "STUDENT"
                   ? "border-[#0EA894] bg-[#0EA894]/10 text-[#0D1B2E]"
                   : "border-slate-200 text-slate-500 hover:border-slate-300"
               }`}
             >
-              Login as Student
+              Student
             </button>
             <button
               type="button"
               onClick={() => setRole("TEACHER")}
-              className={`rounded-2xl border-2 px-4 py-3 text-sm font-bold transition-colors ${
+              className={`rounded-2xl border-2 px-3 py-3 text-xs sm:text-sm font-bold transition-colors ${
                 role === "TEACHER"
                   ? "border-[#0EA894] bg-[#0EA894]/10 text-[#0D1B2E]"
                   : "border-slate-200 text-slate-500 hover:border-slate-300"
               }`}
             >
-              Login as Teacher
+              Teacher
+            </button>
+            <button
+              type="button"
+              onClick={() => setRole("ADMIN")}
+              className={`rounded-2xl border-2 px-3 py-3 text-xs sm:text-sm font-bold transition-colors ${
+                role === "ADMIN"
+                  ? "border-violet-500 bg-violet-50 text-violet-700"
+                  : "border-slate-200 text-slate-500 hover:border-slate-300"
+              }`}
+            >
+              Admin
             </button>
           </div>
 

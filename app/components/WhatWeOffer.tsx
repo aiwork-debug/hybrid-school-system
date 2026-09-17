@@ -24,7 +24,7 @@ export default function WhatWeOffer() {
       {/* Background Subtle Pattern */}
       <div className="absolute inset-0 bg-[radial-gradient(#0D1B2E_1px,transparent_1px)] [background-size:24px_24px] opacity-[0.03] pointer-events-none" />
 
-      {/* Full Stretch Container with Zero Left/Right Padding */}
+      {/* Full Stretch Container */}
       <div className="relative w-full px-0">
 
         {/* Section Header */}
@@ -46,8 +46,8 @@ export default function WhatWeOffer() {
           </p>
         </div>
 
-        {/* Extended Max Width and Full Stretch Grid */}
-        <div className="w-full px-4 sm:px-8 lg:px-12 max-w-[95rem] mx-auto">
+        {/* Increased Max-Width and Responsive Padding for Full Stretch */}
+        <div className="w-full px-4 sm:px-8 lg:px-12 xl:px-16 max-w-[120rem] mx-auto">
           <div className="grid gap-6 sm:grid-cols-3 w-full">
             {offers.map((o, idx) => {
               const IconComponent = o.icon;
