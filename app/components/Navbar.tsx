@@ -10,9 +10,10 @@ export default function Navbar() {
 
   const userRole = session?.user?.role;
 
-  // Ordered links: Home -> Dashboard/Portals -> Other Links (without FAQs)
+  // Ordered links: Home -> Dashboard/Portals -> Guide -> Other Links
   const getNavLinks = () => {
     const homeLink = { label: "Home", href: "/" };
+    const guideLink = { label: "Guide", href: "/guide" };
     const aboutContactLinks = [
       { label: "About Us", href: "/about" },
       { label: "Contact", href: "/contact" },
@@ -23,6 +24,17 @@ export default function Navbar() {
         homeLink,
         { label: "Teacher Portal", href: "/login" },
         { label: "Student Portal", href: "/login" },
+        guideLink,
+        ...aboutContactLinks,
+      ];
+    }
+
+    // If logged in as ADMIN
+    if (userRole === "ADMIN") {
+      return [
+        homeLink,
+        { label: "Admin Dashboard", href: "/dashboard/admin" },
+        guideLink,
         ...aboutContactLinks,
       ];
     }
@@ -32,6 +44,7 @@ export default function Navbar() {
       return [
         homeLink,
         { label: "Teacher Dashboard", href: "/dashboard/teacher" },
+        guideLink,
         ...aboutContactLinks,
       ];
     }
@@ -41,6 +54,7 @@ export default function Navbar() {
       return [
         homeLink,
         { label: "Student Dashboard", href: "/dashboard/student" },
+        guideLink,
         ...aboutContactLinks,
       ];
     }
@@ -50,6 +64,7 @@ export default function Navbar() {
       homeLink,
       { label: "Teacher Portal", href: "/login" },
       { label: "Student Portal", href: "/login" },
+      guideLink,
       ...aboutContactLinks,
     ];
   };
