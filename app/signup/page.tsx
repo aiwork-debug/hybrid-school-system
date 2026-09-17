@@ -56,14 +56,25 @@ export default function SignupPage() {
   }
 
   return (
-    <div className="flex min-h-screen w-full">
+    <div className="relative flex min-h-screen w-full">
+      {/* Back to Home Icon Button */}
+      <Link
+        href="/"
+        title="Back to Home"
+        className="absolute left-6 top-6 z-30 flex h-11 w-11 items-center justify-center rounded-2xl border-2 border-slate-200/80 bg-white/90 text-[#0D1B2E] shadow-sm backdrop-blur-md transition-all hover:border-[#0EA894] hover:text-[#0EA894]"
+      >
+        <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
+      </Link>
+
       <AuthSidePanel
         title="Start learning your way."
         subtitle="Join live classes in real time, or catch up with recorded lectures whenever it suits you."
       />
 
       <div className="flex w-full flex-1 items-center justify-center bg-white px-6 py-16">
-        <div className="w-full max-w-md">
+        <div className="w-full max-w-md pt-8 lg:pt-0">
           <div className="mb-8 flex items-center gap-3">
             <span className="h-[2px] w-8 bg-[#0EA894]" />
             <span className="text-xs font-black uppercase tracking-[0.2em] text-[#0EA894]">

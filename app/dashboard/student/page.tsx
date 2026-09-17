@@ -2,90 +2,60 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
-import Link from "next/link";
 import Navbar from "@/app/components/Navbar";
 import { enrollCourse } from "./actions";
-
-// Strict interface for Live Class item
-interface LiveClassItem {
-  id: string;
-  title: string;
-  startTime?: Date;
-  meetingUrl?: string | null;
-  courseTitle: string;
-}
+import { LiveClassItem } from "./types";
+import LiveClassCard from "./components/LiveClassCard";
+import EnrolledCourseCard from "./components/EnrolledCourseCard";
+import AvailableCourseCard from "./components/AvailableCourseCard";
+import EmptyState from "./components/EmptyState";
 
 export default async function StudentDashboard() {
   const session = await getServerSession(authOptions);
 
-  if (!session) {
-    redirect("/login");
-  }
+  if (!session) redirect("/login");
+  if (!session.user.role) redirect("/choose-role");
+  if (session.user.role !== "STUDENT") redirect("/dashboard/teacher");
 
-  if (!session.user.role) {
-    redirect("/choose-role");
-  }
-
-  if (session.user.role !== "STUDENT") {
-    redirect("/dashboard/teacher");
-  }
-
-  // 1. Fetch courses jo student ne enroll kiye hain
   const enrolledCourses = await prisma.course.findMany({
     where: {
-      enrollments: {
-        some: {
-          studentId: session.user.id,
-        },
-      },
+      enrollments: { some: { studentId: session.user.id } },
     },
     include: {
       teacher: true,
-      chapters: {
-        include: {
-          recordedLectures: true,
-        },
-      },
+      chapters: { include: { recordedLectures: true } },
       liveClasses: true,
     },
   });
 
-  // Map without any 'any' type cast
   const upcomingLiveClasses: LiveClassItem[] = enrolledCourses.flatMap((course) => {
     const classes = course.liveClasses ?? [];
     return classes.map((lc) => ({
       id: lc.id,
       title: lc.title,
-      startTime: 'startTime' in lc ? (lc.startTime as Date) : undefined,
-      meetingUrl: 'meetingUrl' in lc ? (lc.meetingUrl as string | null) : null,
+      startTime: "startTime" in lc ? (lc.startTime as Date) : undefined,
+      meetingUrl: "meetingUrl" in lc ? (lc.meetingUrl as string | null) : null,
       courseTitle: course.title,
     }));
   });
 
-  // 2. Fetch all other available courses jo student ne enroll nahi kiye
   const availableCourses = await prisma.course.findMany({
     where: {
-      NOT: {
-        enrollments: {
-          some: {
-            studentId: session.user.id,
-          },
-        },
-      },
+      NOT: { enrollments: { some: { studentId: session.user.id } } },
     },
     include: {
       teacher: true,
-      _count: {
-        select: { chapters: true },
-      },
+      _count: { select: { chapters: true } },
     },
   });
 
+   const totalTeachers = await prisma.user.count({ where: { role: "TEACHER" } });
+  const totalCourses = await prisma.course.count();
   return (
     <div className="min-h-screen bg-slate-50/50 pb-20">
       <Navbar />
-      
-      {/* Hero Header */}
+
+      {/* Hero */}
       <div className="w-full px-6 sm:px-12 max-w-[105rem] mx-auto mt-6 sm:mt-8 mb-8 z-20">
         <div className="relative overflow-hidden bg-gradient-to-b from-[#070F18] to-[#0D1B2E] py-12 sm:py-16 rounded-[2.5rem] border border-white/10 shadow-2xl px-8 sm:px-16">
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(14,168,148,0.15),rgba(255,255,255,0))] pointer-events-none" />
@@ -97,16 +67,43 @@ export default async function StudentDashboard() {
             <h1 className="mb-3 text-3xl font-black tracking-tight text-white sm:text-4xl">
               Welcome back, {session.user.name || "Student"}! 👋
             </h1>
-            <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
+                       <p className="text-slate-300 text-sm sm:text-base leading-relaxed mb-8">
               Track your enrolled learning paths, explore new subjects, and access lecture videos and materials.
             </p>
+
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-6 border-t border-white/10">
+              <div className="bg-white/5 border border-white/10 rounded-2xl p-4 backdrop-blur-md">
+                <p className="text-2xl sm:text-3xl font-black text-white">{totalTeachers}</p>
+                <p className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-[#0EA894] mt-1">
+                  Total Teachers
+                </p>
+              </div>
+              <div className="bg-white/5 border border-white/10 rounded-2xl p-4 backdrop-blur-md">
+                <p className="text-2xl sm:text-3xl font-black text-white">{totalCourses}</p>
+                <p className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-[#0EA894] mt-1">
+                  Total Courses
+                </p>
+              </div>
+              <div className="bg-white/5 border border-white/10 rounded-2xl p-4 backdrop-blur-md">
+                <p className="text-2xl sm:text-3xl font-black text-white">{enrolledCourses.length}</p>
+                <p className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-[#0EA894] mt-1">
+                  My Enrolled
+                </p>
+              </div>
+              <div className="bg-white/5 border border-white/10 rounded-2xl p-4 backdrop-blur-md">
+                <p className="text-2xl sm:text-3xl font-black text-white">{availableCourses.length}</p>
+                <p className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-[#0EA894] mt-1">
+                  Can Enroll
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
       <div className="w-full px-6 sm:px-12 max-w-[105rem] mx-auto space-y-12">
-        
-        {/* Live Classes Section */}
+
+        {/* Live Classes */}
         {upcomingLiveClasses.length > 0 && (
           <div className="space-y-6">
             <div className="flex items-center justify-between">
@@ -117,40 +114,14 @@ export default async function StudentDashboard() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {upcomingLiveClasses.map((liveClass) => (
-                <div key={liveClass.id} className="rounded-[2.5rem] border-2 border-[#0EA894]/30 bg-white p-6 sm:p-8 shadow-sm flex flex-col justify-between space-y-6 relative overflow-hidden">
-                  <div className="absolute top-0 right-0 bg-[#0EA894] text-white text-[10px] font-black uppercase tracking-widest px-4 py-1 rounded-bl-2xl">
-                    Live
-                  </div>
-                  <div>
-                    <span className="rounded-full bg-[#0EA894]/10 px-3 py-1 text-[11px] font-black uppercase tracking-wider text-[#0EA894] mb-3 inline-block">
-                      {liveClass.courseTitle}
-                    </span>
-                    <h3 className="text-lg font-black text-[#0D1B2E] mb-2">{liveClass.title}</h3>
-                    <p className="text-xs text-slate-500 font-medium">
-                      🕒 {liveClass.startTime ? new Date(liveClass.startTime).toLocaleString() : "Time not specified"}
-                    </p>
-                  </div>
-
-                  {liveClass.meetingUrl && (
-                    <div className="pt-4 border-t border-slate-100">
-                      <a
-                        href={liveClass.meetingUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="block text-center rounded-xl bg-[#0EA894] text-white px-4 py-2.5 text-xs font-black uppercase tracking-wider shadow-md shadow-[#0EA894]/20 hover:bg-[#0c9582] transition-colors"
-                      >
-                        Join Live Class →
-                      </a>
-                    </div>
-                  )}
-                </div>
+              {upcomingLiveClasses.map((lc) => (
+                <LiveClassCard key={lc.id} liveClass={lc} />
               ))}
             </div>
           </div>
         )}
 
-        {/* Enrolled Courses Section */}
+        {/* Enrolled Courses */}
         <div className="space-y-6">
           <div className="flex items-center justify-between">
             <h2 className="text-2xl font-black text-[#0D1B2E]">My Enrolled Courses</h2>
@@ -160,49 +131,17 @@ export default async function StudentDashboard() {
           </div>
 
           {enrolledCourses.length === 0 ? (
-            <div className="rounded-[2rem] border-2 border-dashed border-slate-200 bg-white p-12 text-center">
-              <p className="text-sm text-slate-500 font-medium">
-                You havent enrolled in any courses yet. Explore available courses below and start learning!
-              </p>
-            </div>
+            <EmptyState text="You haven't enrolled in any courses yet. Explore available courses below and start learning!" />
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {enrolledCourses.map((course) => (
-                <div key={course.id} className="rounded-[2.5rem] border-2 border-slate-200/80 bg-white p-6 sm:p-8 shadow-sm flex flex-col justify-between space-y-6">
-                  <div>
-                    <div className="flex items-center justify-between mb-4">
-                      <span className="rounded-full bg-[#0EA894]/10 px-3 py-1 text-[11px] font-black uppercase tracking-wider text-[#0EA894]">
-                        {course.subject}
-                      </span>
-                      <span className="text-xs font-bold text-slate-400">
-                        Instructor: {course.teacher?.name || "Teacher"}
-                      </span>
-                    </div>
-
-                    <h3 className="text-lg font-black text-[#0D1B2E] mb-2">{course.title}</h3>
-                    <p className="text-xs text-slate-500 line-clamp-2 leading-relaxed">
-                      {course.description || "No description provided."}
-                    </p>
-                  </div>
-
-                  <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
-                    <span className="text-xs font-bold text-slate-500">
-                      {course.chapters?.length || 0} Chapters
-                    </span>
-                    <Link
-                      href={`/dashboard/student/courses/${course.id}`}
-                      className="rounded-xl bg-[#0EA894] text-white px-4 py-2 text-xs font-black uppercase tracking-wider shadow-md shadow-[#0EA894]/20 hover:bg-[#0c9582] transition-colors"
-                    >
-                      Continue Learning →
-                    </Link>
-                  </div>
-                </div>
+                <EnrolledCourseCard key={course.id} course={course} />
               ))}
             </div>
           )}
         </div>
 
-        {/* Available Courses Section */}
+        {/* Available Courses */}
         <div className="space-y-6">
           <div className="flex items-center justify-between">
             <h2 className="text-2xl font-black text-[#0D1B2E]">Explore Available Courses</h2>
@@ -212,43 +151,11 @@ export default async function StudentDashboard() {
           </div>
 
           {availableCourses.length === 0 ? (
-            <div className="rounded-[2rem] border border-slate-200 bg-white p-8 text-center">
-              <p className="text-xs text-slate-400">No new courses available right now.</p>
-            </div>
+            <EmptyState text="No new courses available right now." />
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {availableCourses.map((course) => (
-                <div key={course.id} className="rounded-[2.5rem] border-2 border-slate-200/80 bg-white p-6 sm:p-8 shadow-sm flex flex-col justify-between space-y-6">
-                  <div>
-                    <div className="flex items-center justify-between mb-4">
-                      <span className="rounded-full bg-slate-100 px-3 py-1 text-[11px] font-black uppercase tracking-wider text-slate-600">
-                        {course.subject}
-                      </span>
-                      <span className="text-xs font-bold text-slate-400">
-                        {course.teacher?.name || "Teacher"}
-                      </span>
-                    </div>
-
-                    <h3 className="text-lg font-black text-[#0D1B2E] mb-2">{course.title}</h3>
-                    <p className="text-xs text-slate-500 line-clamp-2 leading-relaxed">
-                      {course.description || "No description provided."}
-                    </p>
-                  </div>
-
-                  <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
-                    <span className="text-xs font-bold text-slate-500">
-                      {course._count?.chapters || 0} Chapters
-                    </span>
-                    <form action={enrollCourse.bind(null, course.id)}>
-                      <button
-                        type="submit"
-                        className="rounded-xl bg-[#0D1B2E] text-white px-4 py-2 text-xs font-black uppercase tracking-wider shadow-md hover:bg-slate-800 transition-colors"
-                      >
-                        Enroll Now +
-                      </button>
-                    </form>
-                  </div>
-                </div>
+                <AvailableCourseCard key={course.id} course={course} onEnroll={enrollCourse} />
               ))}
             </div>
           )}

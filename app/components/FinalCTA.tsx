@@ -1,6 +1,41 @@
-import Link from "next/link";
+"use client";
+// File: app/components/FinalCTA.tsx
+
+import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 export default function FinalCTA() {
+  const router = useRouter();
+  const { data: session } = useSession();
+
+  const handleAuthRedirect = (e: React.MouseEvent, defaultTarget: string) => {
+    e.preventDefault();
+
+    if (!session?.user) {
+      // Agar logged in nahi hai toh signup page par bhejein
+      router.push("/signup");
+      return;
+    }
+
+    const role = session.user.role;
+    const roleSelected = session.user.roleSelected;
+
+    // Agar role select nahi kiya hua (Google login wale users ke liye)
+    if (!roleSelected && role !== "ADMIN") {
+      router.push("/choose-role");
+      return;
+    }
+
+    // Role ke mutabiq respective dashboard par redirect karein
+    if (role === "TEACHER") {
+      router.push("/dashboard/teacher");
+    } else if (role === "ADMIN") {
+      router.push("/dashboard/admin");
+    } else {
+      router.push("/dashboard/student");
+    }
+  };
+
   return (
     <section className="relative overflow-hidden bg-[#070F18] py-20 sm:py-28 rounded-[3rem] sm:rounded-[4rem] mx-4 sm:mx-8 lg:mx-12 mb-16 z-10 shadow-2xl">
       {/* Background Glow Effects */}
@@ -32,21 +67,21 @@ export default function FinalCTA() {
 
           {/* Action Buttons */}
           <div className="mt-10 flex flex-col sm:flex-row items-center gap-4 w-full justify-center">
-            <Link
-              href="/signup"
-              className="group inline-flex items-center justify-center rounded-full bg-[#0EA894] px-9 py-4 text-sm font-black text-white shadow-xl shadow-[#0EA894]/25 transition-all duration-300 hover:bg-[#0bc0a9] hover:scale-[1.02] active:scale-[0.98]"
+            <button
+              onClick={(e) => handleAuthRedirect(e, "/signup")}
+              className="group inline-flex items-center justify-center rounded-full bg-[#0EA894] px-9 py-4 text-sm font-black text-white shadow-xl shadow-[#0EA894]/25 transition-all duration-300 hover:bg-[#0bc0a9] hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
             >
               <span>Join a live class</span>
               <span className="ml-2 transition-transform duration-300 group-hover:translate-x-1.5">→</span>
-            </Link>
+            </button>
 
-            <Link
-              href="#lectures"
-              className="group inline-flex items-center justify-center rounded-full border border-white/15 bg-white/[0.03] backdrop-blur-md px-9 py-4 text-sm font-bold text-white transition-all duration-300 hover:bg-white/[0.08] hover:border-white/30 hover:scale-[1.02] active:scale-[0.98]"
+            <button
+              onClick={(e) => handleAuthRedirect(e, "#lectures")}
+              className="group inline-flex items-center justify-center rounded-full border border-white/15 bg-white/[0.03] backdrop-blur-md px-9 py-4 text-sm font-bold text-white transition-all duration-300 hover:bg-white/[0.08] hover:border-white/30 hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
             >
               <span>Browse lectures</span>
               <span className="ml-2 transition-transform duration-300 group-hover:translate-x-1.5 opacity-70 group-hover:opacity-100">→</span>
-            </Link>
+            </button>
           </div>
 
         </div>
