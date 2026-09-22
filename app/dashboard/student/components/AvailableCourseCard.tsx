@@ -11,9 +11,7 @@ export default function AvailableCourseCard({
     <div className="rounded-[2.5rem] border-2 border-slate-200/80 bg-white p-6 sm:p-8 shadow-sm flex flex-col justify-between space-y-6">
       <div>
         <div className="flex items-center justify-between mb-4">
-          <span className="rounded-full bg-slate-100 px-3 py-1 text-[11px] font-black uppercase tracking-wider text-slate-600">
-            {course.subject}
-          </span>
+         
           <span className="text-xs font-bold text-slate-400">
             {course.teacher?.name || "Teacher"}
           </span>

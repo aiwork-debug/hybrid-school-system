@@ -10,10 +10,11 @@ export default function Navbar() {
 
   const userRole = session?.user?.role;
 
-  // Ordered links: Home -> Dashboard/Portals -> Guide -> Other Links
+  // Ordered links: Home -> Dashboard/Portals -> Guide -> FAQs -> Other Links
   const getNavLinks = () => {
     const homeLink = { label: "Home", href: "/" };
     const guideLink = { label: "Guide", href: "/guide" };
+    const faqsLink = { label: "FAQs", href: "/faqs" };
     const aboutContactLinks = [
       { label: "About Us", href: "/about" },
       { label: "Contact", href: "/contact" },
@@ -25,6 +26,7 @@ export default function Navbar() {
         { label: "Teacher Portal", href: "/login" },
         { label: "Student Portal", href: "/login" },
         guideLink,
+        faqsLink,
         ...aboutContactLinks,
       ];
     }
@@ -35,6 +37,7 @@ export default function Navbar() {
         homeLink,
         { label: "Admin Dashboard", href: "/dashboard/admin" },
         guideLink,
+        faqsLink,
         ...aboutContactLinks,
       ];
     }
@@ -45,6 +48,7 @@ export default function Navbar() {
         homeLink,
         { label: "Teacher Dashboard", href: "/dashboard/teacher" },
         guideLink,
+        faqsLink,
         ...aboutContactLinks,
       ];
     }
@@ -55,6 +59,7 @@ export default function Navbar() {
         homeLink,
         { label: "Student Dashboard", href: "/dashboard/student" },
         guideLink,
+        faqsLink,
         ...aboutContactLinks,
       ];
     }
@@ -65,6 +70,7 @@ export default function Navbar() {
       { label: "Teacher Portal", href: "/login" },
       { label: "Student Portal", href: "/login" },
       guideLink,
+      faqsLink,
       ...aboutContactLinks,
     ];
   };

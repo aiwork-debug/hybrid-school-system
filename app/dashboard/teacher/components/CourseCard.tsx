@@ -9,9 +9,7 @@ export default function CourseCard({ course }: { course: TeacherCourse }) {
     >
       <div>
         <div className="mb-4 flex items-center justify-between">
-          <span className="rounded-full bg-[#0EA894]/10 px-3.5 py-1 text-xs font-black uppercase tracking-wider text-[#0EA894]">
-            {course.subject}
-          </span>
+        
           {course.liveClasses.length > 0 && (
             <span className="rounded-full bg-red-50 border border-red-200 px-3.5 py-1 text-xs font-black uppercase tracking-wider text-red-500 animate-pulse">
               Live Upcoming

@@ -68,9 +68,7 @@ export default async function TeacherCourseManagePage({
                 </Link>
 
                 <div className="mb-3 flex items-center gap-3">
-                  <span className="rounded-full bg-[#0EA894]/15 px-3 py-1 text-xs font-black uppercase tracking-wider text-[#0EA894]">
-                    {course.subject}
-                  </span>
+                 
                 </div>
 
                 <h1 className="mb-3 text-3xl font-black tracking-tight text-white sm:text-4xl">

@@ -1,28 +1,30 @@
+// File: app/components/Footer.tsx
+
 import Link from "next/link";
 
 const columns = [
   {
     title: "Learn",
     links: [
-      { label: "Live classes", href: "#live-classes" },
-      { label: "Recorded lectures", href: "#lectures" },
-      { label: "Browse subjects", href: "#" },
+      { label: "Live classes", href: "/#live-classes" },
+      { label: "Recorded lectures", href: "/#lectures" },
+      { label: "Browse subjects", href: "/#subjects" },
     ],
   },
   {
     title: "Teach",
     links: [
-      { label: "Become a teacher", href: "#teachers" },
-      { label: "Upload a lecture", href: "#" },
-      { label: "Teacher resources", href: "#" },
+      { label: "Become a teacher", href: "/signup" },
+      { label: "Upload a lecture", href: "/dashboard/teacher" },
+      { label: "Teacher resources", href: "/dashboard/teacher" },
     ],
   },
   {
     title: "Company",
     links: [
-      { label: "About", href: "#about" },
-      { label: "Contact", href: "#contact" },
-      { label: "FAQs", href: "#faqs" },
+      { label: "About", href: "/about" },
+      { label: "Contact", href: "/contact" },
+      { label: "FAQs", href: "/faqs" },
     ],
   },
 ];
@@ -69,10 +71,10 @@ export default function Footer() {
         <div className="mt-16 flex flex-col gap-4 border-t border-white/10 pt-8 text-xs text-slate-500 md:flex-row md:items-center md:justify-between">
           <p>&copy; {new Date().getFullYear()} HybridSchool. All rights reserved.</p>
           <div className="flex gap-6">
-            <Link href="#" className="transition-colors hover:text-slate-300">
+            <Link href="/privacy" className="transition-colors hover:text-slate-300">
               Privacy Policy
             </Link>
-            <Link href="#" className="transition-colors hover:text-slate-300">
+            <Link href="/terms" className="transition-colors hover:text-slate-300">
               Terms of Service
             </Link>
           </div>

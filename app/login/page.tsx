@@ -37,7 +37,7 @@ export default function LoginPage() {
     const actualRole = session?.user?.role;
     const roleSelected = session?.user?.roleSelected;
 
-    // Admin flow — koi roleSelected/choose-role check nahi lagega
+    // Admin flow ke liye agar admin dashboard rakhna hai ya home page, yahan set kar sakte hain
     if (role === "ADMIN" || actualRole === "ADMIN") {
       if (actualRole !== "ADMIN") {
         setError("This account is not an admin account.");
@@ -61,22 +61,12 @@ export default function LoginPage() {
       return;
     }
 
-    router.push(actualRole === "TEACHER" ? "/dashboard/teacher" : "/dashboard/student");
+    // Sabhi student aur teacher login ke baad seedha home page par jayenge
+    router.push("/");
   }
 
   return (
     <div className="relative flex min-h-screen w-full">
-      {/* Back to Home Icon Button */}
-      <Link
-        href="/"
-        title="Back to Home"
-        className="absolute left-6 top-6 z-30 flex h-11 w-11 items-center justify-center rounded-2xl border-2 border-slate-200/80 bg-white/90 text-[#0D1B2E] shadow-sm backdrop-blur-md transition-all hover:border-[#0EA894] hover:text-[#0EA894]"
-      >
-        <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-        </svg>
-      </Link>
-
       <AuthSidePanel
         title="Welcome back."
         subtitle="Log in to join your next live class or pick up a recorded lecture where you left off."
@@ -200,7 +190,7 @@ export default function LoginPage() {
           </div>
 
           <button
-            onClick={() => signIn("google", { callbackUrl: "/choose-role" })}
+            onClick={() => signIn("google", { callbackUrl: "/" })}
             className="w-full rounded-full border-2 border-slate-200 px-6 py-3.5 text-sm font-bold text-[#0D1B2E] transition-colors hover:border-slate-300 hover:bg-slate-50"
           >
             Continue with Google
