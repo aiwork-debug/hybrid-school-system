@@ -1,27 +1,79 @@
-const steps = [
+"use client";
+
+import { useState } from "react";
+
+const studentSteps = [
   {
     number: "01",
-    title: "Create your account",
-    desc: "Sign up as a student or teacher and get access to your dashboard in seconds.",
+    title: "Create your student account",
+    desc: "Sign up instantly and set your role to student to access your learner portal dashboard.",
   },
   {
     number: "02",
-    title: "Join or deliver a class",
-    desc: "Students join scheduled live classes. Teachers go live or upload a recorded lecture instead.",
+    title: "Join live classes & explore courses",
+    desc: "Browse available subjects, enroll in courses, and click 'Join Live' when your scheduled classes go live.",
   },
   {
     number: "03",
-    title: "Track everything",
-    desc: "Attendance, watch history, and course progress are recorded automatically for everyone.",
+    title: "Learn & track progress",
+    desc: "Access recorded lecture videos, study materials, submit assignments, and track your overall completion progress automatically.",
+  },
+];
+
+const teacherSteps = [
+  {
+    number: "01",
+    title: "Set up your instructor account",
+    desc: "Register on the platform, choose the teacher role, and open your professional instructor portal.",
+  },
+  {
+    number: "02",
+    title: "Create courses & schedule live sessions",
+    desc: "Build your course curriculum, upload chapter lectures, and schedule live streaming classes with meeting links easily.",
+  },
+  {
+    number: "03",
+    title: "Manage students & track engagement",
+    desc: "Monitor student enrollments, review submitted assignments, grade tests, and oversee classroom analytics seamlessly.",
   },
 ];
 
 export default function HowItWorks() {
+  const [activeTab, setActiveTab] = useState<"STUDENT" | "TEACHER">("STUDENT");
+
+  const steps = activeTab === "STUDENT" ? studentSteps : teacherSteps;
+
   return (
     <section className="relative w-full bg-white py-12 sm:py-16 border-t border-slate-100">
       {/* Full Stretch Container with Zero Left/Right Padding */}
       <div className="w-full px-4 sm:px-8 lg:px-16 max-w-[105rem] mx-auto">
         
+        {/* Role Toggle Switcher */}
+        <div className="flex justify-center mb-12">
+          <div className="inline-flex rounded-full bg-slate-50 border border-slate-200 p-1.5 shadow-sm">
+            <button
+              onClick={() => setActiveTab("STUDENT")}
+              className={`rounded-full px-8 py-3 text-sm font-bold transition-all ${
+                activeTab === "STUDENT"
+                  ? "bg-[#0EA894] text-white shadow-md shadow-[#0EA894]/20"
+                  : "text-slate-600 hover:text-slate-900"
+              }`}
+            >
+              For Students 
+            </button>
+            <button
+              onClick={() => setActiveTab("TEACHER")}
+              className={`rounded-full px-8 py-3 text-sm font-bold transition-all ${
+                activeTab === "TEACHER"
+                  ? "bg-[#0EA894] text-white shadow-md shadow-[#0EA894]/20"
+                  : "text-slate-600 hover:text-slate-900"
+              }`}
+            >
+              For Teachers 
+            </button>
+          </div>
+        </div>
+
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-start">
           
           {/* Left Sticky Header */}
@@ -35,11 +87,13 @@ export default function HowItWorks() {
 
             <h2 className="text-4xl font-black tracking-tight text-[#0D1B2E] sm:text-6xl mb-6 leading-[1.08]">
               How it <br />
-              works
+              works for {activeTab === "STUDENT" ? "Students" : "Teachers"}
             </h2>
 
             <p className="text-base sm:text-lg font-normal leading-relaxed text-slate-600 max-w-md mb-8">
-              Three simple steps between signing up and being in class — no complicated setup for students or teachers.
+              {activeTab === "STUDENT"
+                ? "Simple steps to discover courses, join interactive live classes, and manage your learning journey without hassle."
+                : "Streamlined tools to build curriculum, host live lectures, and manage your student community effortlessly."}
             </p>
 
             <a

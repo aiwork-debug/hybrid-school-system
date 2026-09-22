@@ -37,7 +37,7 @@ export default function FinalCTA() {
   };
 
   return (
-    <section className="relative overflow-hidden bg-[#070F18] py-20 sm:py-28 rounded-[3rem] sm:rounded-[4rem] mx-4 sm:mx-8 lg:mx-12 mb-16 z-10 shadow-2xl">
+    <section className="relative overflow-hidden bg-[#070F18] py-12 sm:py-16 rounded-[3rem] sm:rounded-[4rem] mx-4 sm:mx-8 lg:mx-12 mb-16 z-10 shadow-2xl">
       {/* Background Glow Effects */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-80 w-80 rounded-full bg-[#0EA894]/15 blur-[120px] pointer-events-none" />
       <div className="absolute inset-0 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:24px_24px] opacity-[0.03] pointer-events-none" />
@@ -56,7 +56,7 @@ export default function FinalCTA() {
           </div>
 
           {/* Super Bold Heading */}
-          <h2 className="text-4xl font-black tracking-tight text-white sm:text-6xl lg:text-7xl mb-4 leading-[1.08]">
+          <h2 className="text-4xl font-black tracking-tight text-white sm:text-5xl lg:text-6xl mb-4 leading-[1.08]">
             Ready to get started?
           </h2>
 
@@ -66,7 +66,7 @@ export default function FinalCTA() {
           </p>
 
           {/* Action Buttons */}
-          <div className="mt-10 flex flex-col sm:flex-row items-center gap-4 w-full justify-center">
+          <div className="mt-8 flex flex-col sm:flex-row items-center gap-4 w-full justify-center">
             <button
               onClick={(e) => handleAuthRedirect(e, "/signup")}
               className="group inline-flex items-center justify-center rounded-full bg-[#0EA894] px-9 py-4 text-sm font-black text-white shadow-xl shadow-[#0EA894]/25 transition-all duration-300 hover:bg-[#0bc0a9] hover:scale-[1.02] active:scale-[0.98] cursor-pointer"

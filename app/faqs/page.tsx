@@ -17,7 +17,7 @@ interface FAQCategory {
 
 const studentCategories: FAQCategory[] = [
   {
-    categoryTitle: "🎓 Account & Enrollment",
+    categoryTitle: " Account & Enrollment",
     faqs: [
       {
         question: "How do I create a student account and log in?",
@@ -34,7 +34,7 @@ const studentCategories: FAQCategory[] = [
     ],
   },
   {
-    categoryTitle: "🎥 Live Classes & Recorded Lectures",
+    categoryTitle: " Live Classes & Recorded Lectures",
     faqs: [
       {
         question: "How do I join a live class?",
@@ -51,7 +51,7 @@ const studentCategories: FAQCategory[] = [
     ],
   },
   {
-    categoryTitle: "📝 Assignments, Tests & Progress",
+    categoryTitle: " Assignments, Tests & Progress",
     faqs: [
       {
         question: "How do I submit my course assignments?",
@@ -71,7 +71,7 @@ const studentCategories: FAQCategory[] = [
 
 const teacherCategories: FAQCategory[] = [
   {
-    categoryTitle: "📚 Course Creation & Management",
+    categoryTitle: " Course Creation & Management",
     faqs: [
       {
         question: "How do I create and publish a new course?",
@@ -88,7 +88,7 @@ const teacherCategories: FAQCategory[] = [
     ],
   },
   {
-    categoryTitle: "🔴 Hosting Live Classes & Interaction",
+    categoryTitle: " Hosting Live Classes & Interaction",
     faqs: [
       {
         question: "How do I schedule and host a live class?",
@@ -105,7 +105,7 @@ const teacherCategories: FAQCategory[] = [
     ],
   },
   {
-    categoryTitle: "💰 Analytics, Students & Payouts",
+    categoryTitle: " Analytics, Students & Payouts",
     faqs: [
       {
         question: "How do I track student enrollments and performance?",
@@ -163,7 +163,7 @@ export default function FAQsPage() {
                 Help Center & Support
               </span>
               <h1 className="mb-3 text-3xl font-black tracking-tight text-white sm:text-4xl">
-                Frequently Asked Questions ❓
+                Frequently Asked Questions 
               </h1>
               <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
                 Explore structured answers categorized by topics for students and instructors, or submit your own query directly.
@@ -186,7 +186,7 @@ export default function FAQsPage() {
                     : "text-slate-600 hover:text-slate-900"
                 }`}
               >
-                For Students 🎓
+                For Students 
               </button>
               <button
                 onClick={() => { setActiveTab("TEACHER"); setOpenIndices({ "0-0": true }); }}
@@ -196,7 +196,7 @@ export default function FAQsPage() {
                     : "text-slate-600 hover:text-slate-900"
                 }`}
               >
-                For Teachers 👨‍🏫
+                For Teachers 
               </button>
             </div>
           </div>

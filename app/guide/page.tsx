@@ -21,7 +21,7 @@ export default async function GuidePage() {
                 Platform Documentation
               </span>
               <h1 className="mb-3 text-3xl font-black tracking-tight text-white sm:text-4xl">
-                System User Guide 📖
+                System User Guide 
               </h1>
               <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
                 Find complete instructions and workflows for Students, Teachers, and Administrators to get the most out of the platform.

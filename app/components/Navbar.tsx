@@ -46,7 +46,7 @@ export default function Navbar() {
     if (userRole === "TEACHER") {
       return [
         homeLink,
-        { label: "Teacher Dashboard", href: "/dashboard/teacher" },
+        { label: "Instructor Portal", href: "/dashboard/teacher" },
         guideLink,
         faqsLink,
         ...aboutContactLinks,
@@ -57,7 +57,7 @@ export default function Navbar() {
     if (userRole === "STUDENT") {
       return [
         homeLink,
-        { label: "Student Dashboard", href: "/dashboard/student" },
+        { label: "Learner Portal", href: "/dashboard/student" },
         guideLink,
         faqsLink,
         ...aboutContactLinks,
@@ -76,6 +76,10 @@ export default function Navbar() {
   };
 
   const navLinks = getNavLinks();
+
+  // Get first letter of user's name or email for the avatar badge
+  const userName = session?.user?.name || session?.user?.email || "U";
+  const userInitial = userName.charAt(0).toUpperCase();
 
   return (
     <header className="sticky top-0 z-50 border-b border-white/10 bg-[#070F18]/90 backdrop-blur-md">
@@ -105,10 +109,14 @@ export default function Navbar() {
           {status === "loading" ? (
             <div className="h-8 w-20 animate-pulse rounded-full bg-white/5" />
           ) : session ? (
-            <div className="flex items-center gap-4">
-              <span className="text-xs font-bold text-slate-300">
-                Hi, {session.user.name || session.user.email}
-              </span>
+            <div className="flex items-center gap-3">
+              {/* Only Avatar Circle - No Full Name */}
+              <div 
+                title={session.user.name || "User"} 
+                className="h-9 w-9 rounded-full bg-[#0EA894] text-white flex items-center justify-center text-sm font-black shadow-md shadow-[#0EA894]/20 border border-white/15 cursor-pointer"
+              >
+                {userInitial}
+              </div>
               <button
                 onClick={() => signOut({ callbackUrl: "/login" })}
                 className="rounded-full border border-red-500/30 bg-red-500/10 px-5 py-2 text-xs font-bold text-red-400 transition-all hover:bg-red-500/20"
@@ -164,12 +172,22 @@ export default function Navbar() {
             ))}
             <li className="flex flex-col gap-3 pt-4 border-t border-white/10 mt-2">
               {session ? (
-                <button
-                  onClick={() => signOut({ callbackUrl: "/login" })}
-                  className="flex items-center justify-center rounded-full border border-red-500/30 bg-red-500/10 px-5 py-3 text-sm font-bold text-red-400 transition-colors hover:bg-red-500/20"
-                >
-                  Log out
-                </button>
+                <div className="flex flex-col gap-3">
+                  <div className="flex items-center gap-3 bg-white/5 border border-white/10 py-2.5 px-4 rounded-2xl">
+                    <div className="h-8 w-8 rounded-full bg-[#0EA894] text-white flex items-center justify-center text-sm font-black">
+                      {userInitial}
+                    </div>
+                    <span className="text-xs font-bold text-slate-300 uppercase tracking-widest">
+                      Account Active
+                    </span>
+                  </div>
+                  <button
+                    onClick={() => signOut({ callbackUrl: "/login" })}
+                    className="flex items-center justify-center rounded-full border border-red-500/30 bg-red-500/10 px-5 py-3 text-sm font-bold text-red-400 transition-colors hover:bg-red-500/20"
+                  >
+                    Log out
+                  </button>
+                </div>
               ) : (
                 <>
                   <Link
