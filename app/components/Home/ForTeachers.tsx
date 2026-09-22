@@ -62,36 +62,35 @@ export default function ForTeachers({ session, teacherCourses }: ForTeachersProp
   };
 
   return (
-    <section id="teachers" className="relative w-full bg-white py-12 sm:py-16 border-t border-slate-100">
+    <section id="teachers" className="relative w-full bg-white py-10 sm:py-12 border-t border-slate-100">
       <div className="w-full px-4 sm:px-8 lg:px-16 max-w-[105rem] mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
           
           {/* Left Content Column */}
           <div className="lg:col-span-6">
-            <div className="mb-4 flex items-center gap-3">
-              <span className="h-[2px] w-8 bg-[#0EA894]" />
-              <span className="text-xs font-black uppercase tracking-[0.2em] text-[#0EA894]">
+            <div className="mb-3 flex items-center gap-3">
+              <span className="h-[2px] w-6 bg-[#0EA894]" />
+              <span className="text-[11px] font-black uppercase tracking-[0.2em] text-[#0EA894]">
                 {config.tag}
               </span>
             </div>
 
-            <h2 className="mb-6 text-4xl font-black tracking-tight text-[#0D1B2E] sm:text-6xl leading-[1.08]">
+            <h2 className="mb-4 text-3xl font-black tracking-tight text-[#0D1B2E] sm:text-5xl leading-[1.08]">
               {config.title}
             </h2>
 
-            <p className="mb-8 text-base sm:text-lg font-normal leading-relaxed text-slate-600 max-w-xl">
+            <p className="mb-6 text-xs sm:text-sm font-normal leading-relaxed text-slate-600 max-w-xl">
               {config.description}
             </p>
 
-            <ul className="mb-10 flex flex-col gap-4">
+            <ul className="mb-8 flex flex-col gap-3">
               {config.points.map((p, idx) => {
-                const IconComponent = p.icon;
                 return (
-                  <li key={idx} className="flex items-start gap-3.5">
-                    <span className="mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#0EA894]/10 text-[#0EA894] font-bold">
-                      <Check className="h-4 w-4" />
+                  <li key={idx} className="flex items-start gap-3">
+                    <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#0EA894]/10 text-[#0EA894] font-bold">
+                      <Check className="h-3.5 w-3.5" />
                     </span>
-                    <span className="text-base font-medium text-slate-700">{p.text}</span>
+                    <span className="text-xs sm:text-sm font-medium text-slate-700">{p.text}</span>
                   </li>
                 );
               })}
@@ -99,7 +98,7 @@ export default function ForTeachers({ session, teacherCourses }: ForTeachersProp
 
             <Link
               href={config.buttonLink}
-              className="inline-flex items-center justify-center rounded-full bg-[#0D1B2E] px-8 py-4 text-sm font-bold text-white shadow-xl shadow-slate-900/10 hover:bg-[#0EA894] transition-all"
+              className="inline-flex items-center justify-center rounded-full bg-[#0D1B2E] px-7 py-3 text-xs sm:text-sm font-bold text-white shadow-xl shadow-slate-900/10 hover:bg-[#0EA894] transition-all"
             >
               <span>{config.buttonText}</span>
               <span className="ml-2 font-black">→</span>
@@ -107,14 +106,14 @@ export default function ForTeachers({ session, teacherCourses }: ForTeachersProp
           </div>
 
           {/* Right Column with Dynamic Image */}
-          <div className="lg:col-span-6 rounded-[2.5rem] overflow-hidden border-2 border-slate-200/90 shadow-2xl relative h-[380px] bg-slate-900">
+          <div className="lg:col-span-6 rounded-3xl overflow-hidden border-2 border-slate-200/90 shadow-xl relative h-[320px] sm:h-[360px] bg-slate-900">
             <img 
               src={config.image} 
               alt={isStudent ? "Student studying" : isTeacher ? "Teacher lecturing" : "Learning platform"} 
               className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-700"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#0D1B2E]/80 via-transparent to-transparent flex items-end p-8">
-              <p className="text-white text-sm font-bold tracking-wide">
+            <div className="absolute inset-0 bg-gradient-to-t from-[#0D1B2E]/80 via-transparent to-transparent flex items-end p-6">
+              <p className="text-white text-xs sm:text-sm font-bold tracking-wide">
                 {config.quote}
               </p>
             </div>

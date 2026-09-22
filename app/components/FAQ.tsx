@@ -31,41 +31,41 @@ const faqs = [
 
 export default function FAQ() {
   return (
-    <section id="faqs" className="relative w-full bg-white py-12 sm:py-16 border-t border-slate-100">
+    <section id="faqs" className="relative w-full bg-white py-10 sm:py-12 border-t border-slate-100">
       {/* Full Stretch Container with Zero Left/Right Padding */}
       <div className="w-full px-4 sm:px-8 lg:px-16 max-w-[105rem] mx-auto">
         
         {/* Section Header */}
-        <div className="mx-auto mb-14 flex max-w-3xl flex-col items-center text-center">
-          <div className="mb-3 flex items-center gap-3">
-            <span className="h-[2px] w-8 bg-[#0EA894]" />
-            <span className="text-xs font-black uppercase tracking-[0.2em] text-[#0EA894]">
+        <div className="mx-auto mb-10 flex max-w-3xl flex-col items-center text-center">
+          <div className="mb-2 flex items-center gap-3">
+            <span className="h-[2px] w-6 bg-[#0EA894]" />
+            <span className="text-[11px] font-black uppercase tracking-[0.2em] text-[#0EA894]">
               Support & Answers
             </span>
-            <span className="h-[2px] w-8 bg-[#0EA894]" />
+            <span className="h-[2px] w-6 bg-[#0EA894]" />
           </div>
 
-          <h2 className="mb-4 text-3xl font-black tracking-tight text-[#0D1B2E] sm:text-5xl lg:text-6xl">
+          <h2 className="mb-3 text-2xl font-black tracking-tight text-[#0D1B2E] sm:text-4xl">
             Frequently asked questions
           </h2>
 
-          <p className="max-w-xl text-base font-normal leading-relaxed text-slate-600">
+          <p className="max-w-md text-xs sm:text-sm font-normal leading-relaxed text-slate-600">
             Got questions about live classes, recordings, or tracking? Everything you need to know is right here.
           </p>
         </div>
 
         {/* Fully Stretched FAQ Accordion Container */}
-        <div className="w-full rounded-[2.5rem] border-2 border-slate-200/90 bg-slate-50/50 p-6 sm:p-12 shadow-sm backdrop-blur-xl">
+        <div className="w-full rounded-3xl border-2 border-slate-200/90 bg-slate-50/50 p-5 sm:p-8 shadow-sm backdrop-blur-xl">
           <div className="divide-y divide-slate-200/80">
             {faqs.map((item) => (
-              <details key={item.q} className="group py-6 first:pt-0 last:pb-0">
-                <summary className="flex cursor-pointer list-none items-center justify-between text-lg sm:text-xl font-black text-[#0D1B2E] transition-colors hover:text-[#0EA894]">
+              <details key={item.q} className="group py-5 first:pt-0 last:pb-0">
+                <summary className="flex cursor-pointer list-none items-center justify-between text-base sm:text-lg font-black text-[#0D1B2E] transition-colors hover:text-[#0EA894]">
                   <span>{item.q}</span>
-                  <span className="ml-4 flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border border-slate-200 bg-white text-[#0D1B2E] transition-all duration-300 group-open:rotate-45 group-open:bg-[#0EA894] group-open:border-[#0EA894] group-open:text-white group-open:shadow-lg group-open:shadow-[#0EA894]/20">
+                  <span className="ml-4 flex h-8 w-8 shrink-0 items-center justify-center rounded-xl border border-slate-200 bg-white text-[#0D1B2E] transition-all duration-300 group-open:rotate-45 group-open:bg-[#0EA894] group-open:border-[#0EA894] group-open:text-white group-open:shadow-md group-open:shadow-[#0EA894]/20">
                     +
                   </span>
                 </summary>
-                <p className="mt-4 text-base font-normal leading-relaxed text-slate-600 pr-12">
+                <p className="mt-3 text-xs sm:text-sm font-normal leading-relaxed text-slate-600 pr-10">
                   {item.a}
                 </p>
               </details>
