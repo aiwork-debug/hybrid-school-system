@@ -1,0 +1,1 @@
+import{I as o}from"./helpers-CNc8ab6c-2.js";document.querySelector("#post-purchase-welcome-modal")||new URL(window.location.href).searchParams.has("purchase_confirmation")&&o("purchase_confirmation");

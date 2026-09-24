@@ -11,33 +11,32 @@ interface HeroProps {
   teacherCoursesCount: number;
 }
 
-// Har role ke liye alag image sliders (matching hybrid school / online learning theme)
 const loggedOutImages = [
-  "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=85&w=3840&auto=format&fit=crop", // students in class
-  "https://images.unsplash.com/photo-1580582932707-520aed937b7b?q=85&w=3840&auto=format&fit=crop", // online video class
-  "https://images.unsplash.com/photo-1509062522246-3755977927d7?q=85&w=3840&auto=format&fit=crop", // laptop study
-  "https://images.unsplash.com/photo-1571260899304-425eee4c7efc?q=85&w=3840&auto=format&fit=crop", // teacher whiteboard
+  "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=85&w=3840&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1580582932707-520aed937b7b?q=85&w=3840&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1509062522246-3755977927d7?q=85&w=3840&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1571260899304-425eee4c7efc?q=85&w=3840&auto=format&fit=crop",
 ];
 
 const studentImages = [
   {
     bg: "https://images.unsplash.com/photo-1580582932707-520aed937b7b?q=85&w=3840&auto=format&fit=crop",
-    right: "https://images.unsplash.com/photo-1580582932707-520aed937b7b?q=100&w=1200&auto=format&fit=crop",
+    right: "/Hero/student.jpg",
   },
   {
     bg: "https://images.unsplash.com/photo-1509062522246-3755977927d7?q=85&w=3840&auto=format&fit=crop",
-    right: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=100&w=1200&auto=format&fit=crop",
+    right: "/Hero/student.jpg",
   },
 ];
 
 const teacherImages = [
   {
     bg: "https://images.unsplash.com/photo-1571260899304-425eee4c7efc?q=85&w=3840&auto=format&fit=crop",
-    right: "https://images.unsplash.com/photo-1573164713988-8665fc963095?q=100&w=1200&auto=format&fit=crop",
+    right: "/Hero/Teacher.webp",
   },
   {
     bg: "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?q=85&w=3840&auto=format&fit=crop",
-    right: "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?q=100&w=1200&auto=format&fit=crop",
+    right: "/Hero/Teacher.webp",
   },
 ];
 
@@ -61,16 +60,13 @@ export default function Hero({ session, enrolledCount, teacherCoursesCount }: He
     return () => clearInterval(timer);
   }, [activeSlider.length]);
 
-  // Wrap instead of resetting state in an effect — safe even if activeSlider
-  // shrinks/changes (e.g. role switches) and avoids the setState-in-effect warning.
   const safeIndex = currentSlide % activeSlider.length;
   const currentItem = activeSlider[safeIndex] || activeSlider[0];
 
   return (
-    // Outer section: white page bg + side padding so the dark card sits INSET, never full-bleed
     <section className="relative w-full bg-white px-4 sm:px-8 lg:px-12 pt-8 pb-4 sm:pt-10 mb-8">
-      <div className="relative w-full max-w-[105rem] mx-auto rounded-[2rem] sm:rounded-[2.5rem] overflow-hidden bg-[#070F18] shadow-2xl shadow-black/20 ring-1 ring-white/5 py-12 sm:py-16 min-h-[420px] sm:min-h-[480px]">
-        {/* Background Slider — fade + slow zoom (Ken Burns), no translate slide */}
+      <div className="relative w-full max-w-[105rem] mx-auto rounded-[2rem] sm:rounded-[2.5rem] overflow-hidden bg-[#070F18] shadow-2xl shadow-black/20 ring-1 ring-white/5 py-12 sm:py-16 min-h-[460px] sm:min-h-[520px]">
+        {/* Background Slider */}
         <div className="absolute inset-0 z-0 overflow-hidden">
           {activeSlider.map((slide, index) => (
             <div
@@ -89,17 +85,31 @@ export default function Hero({ session, enrolledCount, teacherCoursesCount }: He
           ))}
         </div>
 
-        {/* Overlays for readable text on top of photos — kept light so photos stay visible */}
-        <div className="absolute inset-0 bg-[#070F18]/25 z-10" />
+        {/* Overlays */}
+        <div className="absolute inset-0 bg-[#070F18]/30 z-10" />
         <div className="absolute inset-0 bg-gradient-to-b from-[#070F18]/70 via-[#070F18]/10 to-[#070F18]/75 z-10" />
         <div className="absolute inset-0 bg-gradient-to-r from-[#070F18]/45 via-transparent to-[#070F18]/45 z-10" />
+
+        {/* Right Side Image — Pushed completely flush to the right edge and bottom corner */}
+        {!isLoggedOut && currentItem.right && (
+          <div className="absolute right-0 bottom-0 z-20 hidden lg:flex items-end justify-end w-[360px] xl:w-[420px] h-full pointer-events-none pr-0 mr-0">
+            <div className="absolute bottom-16 right-16 w-72 h-72 bg-[#0EA894]/30 blur-[100px] rounded-full z-0" />
+            <img
+              src={currentItem.right}
+              alt="Role specific view"
+              className="relative z-10 h-full w-full object-contain object-right-bottom drop-shadow-2xl"
+            />
+          </div>
+        )}
 
         <div className="relative z-20 w-full px-6 sm:px-12 max-w-[100rem] mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             {/* Left Text Content */}
             <div
               className={`${
-                isLoggedOut ? "lg:col-span-10 lg:col-start-2 text-center items-center" : "lg:col-span-8 text-left items-start"
+                isLoggedOut
+                  ? "lg:col-span-10 lg:col-start-2 text-center items-center"
+                  : "lg:col-span-7 text-left items-start"
               } flex flex-col`}
             >
               <div className="group inline-flex items-center gap-2.5 rounded-full border border-[#0EA894]/40 bg-[#0EA894]/15 px-5 py-2 text-xs font-bold text-[#0EA894] tracking-wider uppercase mb-6 backdrop-blur-md shadow-lg">
@@ -186,28 +196,6 @@ export default function Hero({ session, enrolledCount, teacherCoursesCount }: He
                 )}
               </div>
             </div>
-
-            {/* Right Side Image Card (logged-in users only) */}
-            {!isLoggedOut && currentItem.right && (
-              <div className="lg:col-span-4 hidden lg:flex justify-end relative">
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-[#0EA894]/30 blur-[80px] rounded-full z-0 pointer-events-none" />
-
-                <div className="relative z-10 w-full max-w-[260px] aspect-[4/5] rounded-[2rem] overflow-hidden border-4 border-white/15 shadow-2xl">
-                  <img
-                    src={currentItem.right}
-                    alt="Role specific view"
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#070F18]/80 via-transparent to-transparent" />
-                  <div className="absolute bottom-5 left-5 bg-white/15 backdrop-blur-md border border-white/25 rounded-full px-4 py-1.5 flex items-center gap-2 shadow-lg">
-                    <span className="h-2 w-2 rounded-full bg-[#0EA894] animate-pulse" />
-                    <span className="text-white text-xs font-bold tracking-wide">
-                      {role === "STUDENT" ? "Keep Growing" : "Keep Inspiring"}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            )}
           </div>
         </div>
 

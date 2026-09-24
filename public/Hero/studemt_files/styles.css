@@ -1,0 +1,19 @@
+.pw-tag iframe {
+    display: unset !important;
+}
+
+body:has(#pw-oop-bottom_rail) footer.ez-site-footer {
+    padding-bottom: 100px;
+}
+
+#pw-oop-bottom_rail {
+    padding-top: 0px !important;
+}
+
+body:has(#pw-oop-bottom_rail[style*="bottom: 40px"]) button.bottom-\[104px\] {
+    bottom: 140px !important;
+}
+
+.ez-promo-popup {
+    z-index: 2147483644 !important;
+}

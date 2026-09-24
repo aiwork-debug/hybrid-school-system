@@ -9,6 +9,7 @@ import WhatWeOffer from "./components/WhatWeOffer";
 import HowItWorks from "./components/Home/HowItWorks";
 import PopularSubjects from "./components/Home/PopularSubjects";
 import ForTeachers from "./components/Home/ForTeachers";
+import SuccessStories from "./components/Home/SuccessStories";
 import FAQ from "./components/FAQ";
 import FinalCTA from "./components/FinalCTA";
 import Footer from "./components/Footer";
@@ -65,6 +66,8 @@ export default async function Home() {
         
         {/* ForTeachers Section */}
         <ForTeachers session={session} teacherCourses={teacherCourses} />
+        <SuccessStories />
+
         
         <FAQ />
         <FinalCTA />
